@@ -46,9 +46,16 @@ public class AutoGrowTextInputModule extends ReactContextBaseJavaModule {
         mTopOffset = 0;
         ReactApplicationContext reactContext = this.getReactApplicationContext();
         UIManagerModule uiManager = reactContext.getNativeModule(UIManagerModule.class);
+        if (uiManager == null) {
+            // UIManagerModule is not available (e.g., in new architecture)
+            return;
+        }
         uiManager.addUIBlock(new UIBlock() {
             public void execute (NativeViewHierarchyManager nvhm) {
                 editText = (ReactEditText) nvhm.resolveView(tag);
+                if (editText == null) {
+                    return;
+                }
                 if (param.hasKey("maxHeight") && !param.isNull("maxHeight")) {
                     mMaxHeight = dpToPx(param.getDouble("maxHeight"));
                 }
@@ -162,13 +169,19 @@ public class AutoGrowTextInputModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void resetKeyboardInput(final int reactTagToReset) {
         UIManagerModule uiManager = getReactApplicationContext().getNativeModule(UIManagerModule.class);
+        if (uiManager == null) {
+            // UIManagerModule is not available (e.g., in new architecture)
+            return;
+        }
         uiManager.addUIBlock(new UIBlock() {
             @Override
             public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
                 InputMethodManager imm = (InputMethodManager) getReactApplicationContext().getBaseContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     View viewToReset = nativeViewHierarchyManager.resolveView(reactTagToReset);
+                    if (viewToReset != null) {
                     imm.restartInput(viewToReset);
+                    }
                 }
             }
         });

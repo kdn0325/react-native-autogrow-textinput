@@ -91,9 +91,7 @@ public class AutoGrowTextInputModule extends ReactContextBaseJavaModule {
 
     private void scrollToCaret() {
         if (mScrollParent == null) {
-
             mScrollParent = findScrollParent(editText);
-
         }
         boolean isAtMaxHeight = mScrollParent.getHeight() >= mMaxHeight;
         if (mHasScrollParent || isAtMaxHeight) {
@@ -119,6 +117,7 @@ public class AutoGrowTextInputModule extends ReactContextBaseJavaModule {
 
         return null;
     }
+
     private View findScrollParent(View v) {
         mTopOffset = v.getTop();
         while (v.getParent() != null && v.getParent() instanceof View) {
@@ -133,6 +132,7 @@ public class AutoGrowTextInputModule extends ReactContextBaseJavaModule {
         mTopOffset = 0;
         return editText;
     }
+
     private Integer getCaretY() {
         int pos = editText.getSelectionStart();
         Layout layout = editText.getLayout();
@@ -145,6 +145,7 @@ public class AutoGrowTextInputModule extends ReactContextBaseJavaModule {
             return null;
         }
     }
+
     @ReactMethod
     public void performCleanupForInput(Integer tag) {
         mScrollParent = null;
